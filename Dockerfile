@@ -7,4 +7,5 @@ RUN apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv --keyserver packa
 RUN apt-get update; apt-get install -y kubectl azure-cli; rm -rf /var/lib/apt/lists/*
 RUN echo '#!/bin/bash\nkubectl config set-cluster default --server=https://kubernetes.default --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt; kubectl config set-context default --cluster=default; token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token); kubectl config set-credentials user --token=$token; kubectl config set-context default --user=user; kubectl config use-context default' > /opt/configure-kubectl.sh
 RUN chmod +x /opt/configure-kubectl.sh
+ADD retry.ps1 /opt/retry.ps1
 CMD [ "pwsh" ]
