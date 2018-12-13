@@ -79,7 +79,8 @@ function Call-CommandWithRetries
         [bool]$TrustExitCode = $True,
         [int]$RetrySleepSeconds = 10,
         [int]$MaxAttempts = 10,
-        [bool]$PrintCommand = $True
+        [bool]$PrintCommand = $True,
+        [bool]$PrintOutput = $False
     )
 
     Process
@@ -88,7 +89,8 @@ function Call-CommandWithRetries
         while ($true)
         {
             Write-Host $(if ($PrintCommand) {"Executing: $Command $Arguments"} else {"Executing command..."})
-            & $Command $Arguments 2>&1 | Tee-Object -Variable output | Write-Host
+            & $Command $Arguments 2>&1 | Tee-Object -Variable output
+            if ($PrintOutput) {Write-Host $output}
 
             $stderr = $output | where { $_ -is [System.Management.Automation.ErrorRecord] }
             if ( ($LASTEXITCODE -eq 0) -and ($TrustExitCode -or !($stderr)) )
