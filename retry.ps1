@@ -55,7 +55,7 @@ function Call-CommandWithRetries
         while ($true)
         {
             Write-Host $(if ($PrintCommand) {"Executing: $Command $Arguments"} else {"Executing command..."})
-            & $Command $Arguments 2>&1 | Tee-Object -Variable output
+            $output = & $Command $Arguments 2>&1
             if ($PrintOutput) {Write-Host $output}
 
             $stderr = $output | where { $_ -is [System.Management.Automation.ErrorRecord] }
